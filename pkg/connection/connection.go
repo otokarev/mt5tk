@@ -75,7 +75,7 @@ func (c *Connection) Get(url string) ([]byte, error) {
 }
 
 func (c *Connection) processGetQuery(url string) ([]byte, error) {
-	resp, err := c.getClient().Get(url)
+	resp, err := c.getClient().Get(c.url + url)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ func (c *Connection) connect() error {
 	if err != nil {
 		log.Fatal(err)
 	}
-	payload, err := c.processGetQuery(c.url + "/api/auth/start?" + q.Encode())
+	payload, err := c.processGetQuery("/api/auth/start?" + q.Encode())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -131,7 +131,7 @@ func (c *Connection) connect() error {
 	if err != nil {
 		log.Fatal(err)
 	}
-	payload, err = c.processGetQuery(c.url + "/api/auth/answer?" + q.Encode())
+	payload, err = c.processGetQuery("/api/auth/answer?" + q.Encode())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -153,7 +153,7 @@ func (c *Connection) Ping() {
 	if err := c.connect(); err != nil {
 		panic("Cannot connect to the server")
 	}
-	_, err := c.processGetQuery(c.url + "/api/test/access")
+	_, err := c.processGetQuery("/api/test/access")
 	if err != nil {
 		panic("Disconnected")
 	}
