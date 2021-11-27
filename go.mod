@@ -1,4 +1,4 @@
-module github.com/otokarev/mt5toolkit
+module github.com/otokarev/mt5tk
 
 go 1.14
 

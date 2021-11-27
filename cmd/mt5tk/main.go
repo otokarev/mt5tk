@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/ilyakaznacheev/cleanenv"
-	"github.com/otokarev/mt5toolkit/pkg/config"
-	"github.com/otokarev/mt5toolkit/pkg/connection"
+	"github.com/otokarev/mt5tk/pkg/config"
+	"github.com/otokarev/mt5tk/pkg/connection"
 	"log"
 )
 

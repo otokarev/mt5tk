@@ -17,12 +17,12 @@ import (
 )
 
 type Connection struct {
-	url string
-	login string
-	password string
+	url           string
+	login         string
+	password      string
 	skipVerifySsl bool
-	client *http.Client
-	connected bool
+	client        *http.Client
+	connected     bool
 }
 
 func NewConnection(url string, login string, password string, skipVerifySsl bool) *Connection {
@@ -31,24 +31,24 @@ func NewConnection(url string, login string, password string, skipVerifySsl bool
 
 type startRequest struct {
 	Version string `url:"version"`
-	Agent string `url:"agent"`
-	Login string `url:"login"`
-	Type string `url:"type"`
+	Agent   string `url:"agent"`
+	Login   string `url:"login"`
+	Type    string `url:"type"`
 }
 
 type startResponse struct {
-	Retcode string `json:"retcode"`
+	Retcode       string `json:"retcode"`
 	VersionAccess string `json:"version_access"`
 	SrvRand       string `json:"srv_rand"`
 }
 
 type answerRequest struct {
 	SrvRandAnswer string `url:"srv_rand_answer"`
-	CliRand string `url:"cli_rand"`
+	CliRand       string `url:"cli_rand"`
 }
 
 type answerResponse struct {
-	Retcode string `json:"retcode"`
+	Retcode       string `json:"retcode"`
 	CliRandAnswer string `json:"cli_rand_answer"`
 }
 
@@ -67,7 +67,7 @@ func (c *Connection) getClient() *http.Client {
 	return c.client
 }
 
-func (c *Connection) Get(url string) ([]byte, error)  {
+func (c *Connection) Get(url string) ([]byte, error) {
 	if err := c.connect(); err != nil {
 		panic("Cannot connect to the server")
 	}
@@ -89,7 +89,6 @@ func (c *Connection) processGetQuery(url string) ([]byte, error) {
 		return nil, errors.New(fmt.Sprintf("Bad response: url: '%s'; status '%s'; response: '%s'", url, resp.Status, string(body)))
 	}
 
-
 	var response retcodeResponse
 	err = json.Unmarshal(body, &response)
 	if err != nil {
@@ -108,7 +107,7 @@ func (c *Connection) connect() error {
 		return nil
 	}
 
-	params := startRequest{"1000", "mt5toolkit", c.login, "manager"}
+	params := startRequest{"1000", "mt5tk", c.login, "manager"}
 	q, err := query.Values(params)
 	if err != nil {
 		log.Fatal(err)
@@ -160,7 +159,7 @@ func (c *Connection) Ping() {
 	}
 }
 
-func encodeMd5(in []byte) []byte  {
+func encodeMd5(in []byte) []byte {
 	h := md5.New()
 	h.Write(in)
 	return h.Sum(nil)
@@ -170,7 +169,10 @@ func encodeUtf16leMd5(s string) []byte {
 	enc := unicode.UTF16(unicode.LittleEndian, unicode.IgnoreBOM).NewEncoder()
 	hasher := md5.New()
 	t := transform.NewWriter(hasher, enc)
-	t.Write([]byte(s))
+	_, err := t.Write([]byte(s))
+	if err != nil {
+		return nil
+	}
 
 	return hasher.Sum(nil)
 }
