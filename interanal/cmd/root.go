@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/otokarev/mt5tk/interanal/cmd/group"
 	"github.com/otokarev/mt5tk/interanal/cmd/symbol"
 	"github.com/otokarev/mt5tk/pkg/client"
 	"github.com/otokarev/mt5tk/pkg/connection"
@@ -44,6 +45,7 @@ func init() {
 	viper.BindPFlag("skip_verify_ssl", RootCmd.PersistentFlags().Lookup("skip_verify_ssl"))
 
 	RootCmd.AddCommand(symbol.Build(&modelFactory))
+	RootCmd.AddCommand(group.Build(&modelFactory))
 }
 
 func initModelFactory() {
@@ -69,9 +71,7 @@ func initConfig() {
 
 	viper.AutomaticEnv() // read in environment variables that match
 
-	if err := viper.ReadInConfig(); err == nil {
-		log.Println("Using config file:", viper.ConfigFileUsed())
-	} else {
+	if err := viper.ReadInConfig(); err != nil {
 		log.Fatal(err)
 	}
 }

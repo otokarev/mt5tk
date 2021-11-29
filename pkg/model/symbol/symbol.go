@@ -20,7 +20,7 @@ type getRequest struct {
 }
 
 type getResponse struct {
-	Answer Description `json:"answer"`
+	Answer SymbolObject `json:"answer"`
 }
 
 func (s *Symbol) List() []string {
@@ -36,7 +36,7 @@ func (s *Symbol) List() []string {
 	return resp.Answer
 }
 
-func (s *Symbol) Get(symbol string) Description {
+func (s *Symbol) Get(symbol string) SymbolObject {
 	req := getRequest{Symbol: symbol}
 	q, err := query.Values(req)
 	if err != nil {

@@ -1,4 +1,4 @@
-package symbol
+package group
 
 import (
 	"github.com/otokarev/mt5tk/interanal/cmd/util"
@@ -7,11 +7,13 @@ import (
 )
 
 func buildList() *cobra.Command {
+	var jsonPath string
+
 	listCmd := &cobra.Command{
 		Use:   "list",
-		Short: "List symbols",
+		Short: "List groups",
 		Run: func(cmd *cobra.Command, args []string) {
-			results := modelFactory.Symbol().List()
+			results := modelFactory.Group().List()
 			jsonPath, _ := cmd.Flags().GetString("jsonpath")
 			err := util.PrintResult(jsonPath, results)
 			if err != nil {
@@ -19,6 +21,7 @@ func buildList() *cobra.Command {
 			}
 		},
 	}
+	listCmd.Flags().StringVarP(&jsonPath, "jsonpath", "j", "", "JSONPath template")
 
 	return listCmd
 }

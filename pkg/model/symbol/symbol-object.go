@@ -1,6 +1,6 @@
 package symbol
 
-type Description struct {
+type SymbolObject struct {
 	Symbol                         string `json:"Symbol"`
 	Path                           string `json:"Path"`
 	ISIN                           string `json:"ISIN"`

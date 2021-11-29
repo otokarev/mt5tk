@@ -1,4 +1,4 @@
-package symbol
+package group
 
 import (
 	"github.com/otokarev/mt5tk/interanal/cmd/util"
@@ -7,15 +7,15 @@ import (
 )
 
 func buildGet() *cobra.Command {
-	var symbol string
+	var group string
 	var jsonPath string
 
 	var getCmd = &cobra.Command{
 		Use:   "get",
-		Short: "Get symbol's details",
+		Short: "Get group's details",
 		Run: func(cmd *cobra.Command, args []string) {
-			symbol, _ = cmd.Flags().GetString("symbol")
-			results := modelFactory.Symbol().Get(symbol)
+			group, _ = cmd.Flags().GetString("group")
+			results := modelFactory.Group().Get(group)
 			jsonPath, _ := cmd.Flags().GetString("jsonpath")
 			err := util.PrintResult(jsonPath, results)
 			if err != nil {
@@ -23,9 +23,9 @@ func buildGet() *cobra.Command {
 			}
 		},
 	}
-	getCmd.Flags().StringVarP(&symbol, "symbol", "s", "", "Symbol name")
 	getCmd.Flags().StringVarP(&jsonPath, "jsonpath", "j", "", "JSONPath template")
-	getCmd.MarkFlagRequired("symbol")
+	getCmd.Flags().StringVarP(&group, "group", "g", "", "Group name")
+	getCmd.MarkFlagRequired("group")
 
 	return getCmd
 }

@@ -1,4 +1,4 @@
-package symbol
+package group
 
 import (
 	"github.com/otokarev/mt5tk/pkg/model"
@@ -9,13 +9,13 @@ var modelFactory *model.Factory
 
 func Build(factory *model.Factory) *cobra.Command {
 	modelFactory = factory
-	var symbolCmd = &cobra.Command{
-		Use:   "symbol",
-		Short: "Symbols operations",
+	var groupCmd = &cobra.Command{
+		Use:   "group",
+		Short: "Groups operations",
 	}
 
-	symbolCmd.AddCommand(buildGet())
-	symbolCmd.AddCommand(buildList())
+	groupCmd.AddCommand(buildGet())
+	groupCmd.AddCommand(buildList())
 
-	return symbolCmd
+	return groupCmd
 }
