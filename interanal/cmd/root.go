@@ -1,14 +1,14 @@
 package cmd
 
 import (
+	"github.com/otokarev/mt5tk/interanal/cmd/symbol"
 	"github.com/otokarev/mt5tk/pkg/client"
 	"github.com/otokarev/mt5tk/pkg/connection"
 	"github.com/otokarev/mt5tk/pkg/model"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"log"
 	"os"
-
-	"github.com/spf13/viper"
 )
 
 var cfgFile string
@@ -17,30 +17,33 @@ var login string
 var password string
 var skipVerifySsl bool
 
-var modelFactory *model.Factory
+var modelFactory model.Factory
 
-var rootCmd = &cobra.Command{
+var RootCmd = &cobra.Command{
 	Use:   "mt5tk",
 	Short: "Utility to query MT5 server",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+// This is called by main.main(). It only needs to happen once to the RootCmd.
 func Execute() {
-	cobra.CheckErr(rootCmd.Execute())
+	cobra.CheckErr(RootCmd.Execute())
 }
 
 func init() {
 	cobra.OnInitialize(initConfig, initModelFactory)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.mt5tk.yml)")
-	rootCmd.PersistentFlags().StringVar(&server, "server", "", "MT5 server DSN")
-	rootCmd.PersistentFlags().StringVar(&login, "login", "", "MT5 server login")
-	rootCmd.PersistentFlags().StringVar(&password, "password", "", "MT5 server password")
-	rootCmd.PersistentFlags().BoolVar(&skipVerifySsl, "skip_verify_ssl", false, "Skip SSL verification while communicate with MT5 server")
-	viper.BindPFlag("server", rootCmd.PersistentFlags().Lookup("server"))
-	viper.BindPFlag("login", rootCmd.PersistentFlags().Lookup("login"))
-	viper.BindPFlag("password", rootCmd.PersistentFlags().Lookup("password"))
-	viper.BindPFlag("skip_verify_ssl", rootCmd.PersistentFlags().Lookup("skip_verify_ssl"))
+	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.mt5tk.yml)")
+	RootCmd.PersistentFlags().StringVar(&server, "server", "", "MT5 server DSN")
+	RootCmd.PersistentFlags().StringVar(&login, "login", "", "MT5 server login")
+	RootCmd.PersistentFlags().StringVar(&password, "password", "", "MT5 server password")
+	RootCmd.PersistentFlags().BoolVar(&skipVerifySsl, "skip_verify_ssl", false, "Skip SSL verification while communicate with MT5 server")
+
+	viper.BindPFlag("server", RootCmd.PersistentFlags().Lookup("server"))
+	viper.BindPFlag("login", RootCmd.PersistentFlags().Lookup("login"))
+	viper.BindPFlag("password", RootCmd.PersistentFlags().Lookup("password"))
+	viper.BindPFlag("skip_verify_ssl", RootCmd.PersistentFlags().Lookup("skip_verify_ssl"))
+
+	RootCmd.AddCommand(symbol.Build(&modelFactory))
 }
 
 func initModelFactory() {
@@ -49,7 +52,7 @@ func initModelFactory() {
 		viper.GetString("login"),
 		viper.GetString("password"),
 		viper.GetBool("skip_verify_ssl"))
-	modelFactory = &model.Factory{Client: &client.Client{Connection: conn}}
+	modelFactory = model.Factory{Client: &client.Client{Connection: conn}}
 }
 
 func initConfig() {
