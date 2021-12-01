@@ -14,9 +14,12 @@ func buildGet() *cobra.Command {
 		Use:   "get",
 		Short: "Get group's details",
 		Run: func(cmd *cobra.Command, args []string) {
-			results := modelFactory.Group().Get(group)
-			err := output.Print(outputFormat, results)
+			results, err := modelFactory.Group().Get(group)
 			if err != nil {
+				log.Fatal(err)
+			}
+
+			if err := output.Print(outputFormat, results); err != nil {
 				log.Fatal(err)
 			}
 		},

@@ -27,23 +27,23 @@ type totalResponse struct {
 	} `json:"answer"`
 }
 
-func (s *Group) Get(group string) GroupObject {
+func (s *Group) Get(group string) (GroupObject, error) {
 	req := getRequest{Group: group}
 	q, err := query.Values(req)
 	if err != nil {
-		log.Fatal(err)
+		return GroupObject{}, err
 	}
 
 	payload, err := s.Client.Get("/api/group/get?" + q.Encode())
 	if err != nil {
-		log.Fatal(err)
+		return GroupObject{}, err
 	}
 	resp := getResponse{}
 	if nil != json.Unmarshal(payload, &resp) {
-		log.Fatal(err)
+		return GroupObject{}, err
 	}
 
-	return resp.Answer
+	return resp.Answer, nil
 }
 
 func (s *Group) List() []GroupObject {

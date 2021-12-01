@@ -12,9 +12,11 @@ func buildList() *cobra.Command {
 		Use:   "list",
 		Short: "List symbols",
 		Run: func(cmd *cobra.Command, args []string) {
-			results := modelFactory.Symbol().List()
-			err := output.Print(outputFormat, results)
+			results, err := modelFactory.Symbol().List()
 			if err != nil {
+				log.Fatal(err)
+			}
+			if err := output.Print(outputFormat, results); err != nil {
 				log.Fatal(err)
 			}
 		},
