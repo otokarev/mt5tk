@@ -99,7 +99,7 @@ func (c *Connection) Post(url string, body []byte) ([]byte, error) {
 	}
 
 	if response.Retcode != "0 Done" {
-		return nil, errors.New(fmt.Sprintf("Request failed. Retcode: `%s`", response.Retcode))
+		return nil, NewError(response.Retcode)
 	}
 
 	return body, nil
@@ -127,7 +127,7 @@ func (c *Connection) processGetQuery(url string) ([]byte, error) {
 	}
 
 	if response.Retcode != "0 Done" {
-		return nil, errors.New(fmt.Sprintf("Request failed. Retcode: `%s`", response.Retcode))
+		return nil, NewError(response.Retcode)
 	}
 
 	return body, nil

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/google/go-querystring/query"
 	"github.com/otokarev/mt5tk/pkg/client"
+	"github.com/otokarev/mt5tk/pkg/connection"
 	"log"
 	"strconv"
 )
@@ -44,6 +45,20 @@ func (g *Group) Add(data GroupObject) (GroupObject, error) {
 	}
 
 	return result, err
+}
+
+func (g *Group) Exists(group string) (bool, error) {
+	_, err := g.Get(group)
+	if err == nil {
+		return true, nil
+	}
+
+	if cerr, ok := err.(*connection.Error); ok == true && cerr.IsNotFound() == false {
+		log.Fatalf("cannot verify group %s existance, error: %s", group, err.Error())
+		return false, cerr
+	}
+
+	return false, nil
 }
 
 func (g *Group) Get(group string) (GroupObject, error) {

@@ -2,7 +2,6 @@ package group
 
 import (
 	"encoding/json"
-	"github.com/otokarev/mt5tk/interanal/cmd/util/output"
 	group2 "github.com/otokarev/mt5tk/pkg/model/group"
 	"github.com/spf13/cobra"
 	"io/ioutil"
@@ -50,13 +49,15 @@ func buildFillWithSymbols() *cobra.Command {
 
 			groupObject.Symbols = groupSymbolObjects
 
-			output.Print("json", groupObject)
+			if _, err := modelFactory.Group().Add(groupObject); err != nil {
+				log.Fatalf("cannot update egroup %s, error: %s", group, err.Error)
+			}
 		},
 	}
 	cmd.Flags().StringVarP(
 		&templatePath,
 		"template-path",
-		"p",
+		"t",
 		"",
 		"Path to symbol template file (json)",
 	)

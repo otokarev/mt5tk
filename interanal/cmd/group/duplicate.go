@@ -17,7 +17,12 @@ func buildDuplicate() *cobra.Command {
 			if err != nil {
 				log.Fatalf("cannot load source group %s, error: %s", srcName, err.Error())
 			}
-			if _, err := modelFactory.Group().Get(newName); err == nil {
+
+			exists, err := modelFactory.Group().Exists(newName)
+			if err != nil {
+				log.Fatalf("cannot verify group %s existance, error: %s", newName, err.Error())
+			}
+			if exists {
 				log.Fatalf("group %s already exists", newName)
 			}
 
