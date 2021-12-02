@@ -27,14 +27,33 @@ type totalResponse struct {
 	} `json:"answer"`
 }
 
-func (s *Group) Get(group string) (GroupObject, error) {
+func (g *Group) Add(data GroupObject) (GroupObject, error) {
+	body, err := json.Marshal(data)
+	if err != nil {
+		return GroupObject{}, err
+	}
+	resultBytes, err := g.Client.Post("/api/group/add", body)
+	if err != nil {
+		return GroupObject{}, err
+	}
+
+	var result GroupObject
+	err = json.Unmarshal(resultBytes, &result)
+	if err != nil {
+		return GroupObject{}, err
+	}
+
+	return result, err
+}
+
+func (g *Group) Get(group string) (GroupObject, error) {
 	req := getRequest{Group: group}
 	q, err := query.Values(req)
 	if err != nil {
 		return GroupObject{}, err
 	}
 
-	payload, err := s.Client.Get("/api/group/get?" + q.Encode())
+	payload, err := g.Client.Get("/api/group/get?" + q.Encode())
 	if err != nil {
 		return GroupObject{}, err
 	}
@@ -46,8 +65,8 @@ func (s *Group) Get(group string) (GroupObject, error) {
 	return resp.Answer, nil
 }
 
-func (s *Group) List() []GroupObject {
-	payload, err := s.Client.Get("/api/group/total")
+func (g *Group) List() []GroupObject {
+	payload, err := g.Client.Get("/api/group/total")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,7 +81,7 @@ func (s *Group) List() []GroupObject {
 
 	results := []GroupObject{}
 	for i := 0; i < total; i++ {
-		payload, err := s.Client.Get(fmt.Sprintf("/api/group/next?index=%d", i))
+		payload, err := g.Client.Get(fmt.Sprintf("/api/group/next?index=%d", i))
 		if err != nil {
 			log.Fatal(err)
 		}

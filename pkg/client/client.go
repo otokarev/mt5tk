@@ -13,3 +13,7 @@ func (c *Client) Get(url string) ([]byte, error) {
 func (c *Client) Ping() {
 	c.Connection.Ping()
 }
+
+func (c *Client) Post(url string, body []byte) ([]byte, error) {
+	return c.Connection.Post(url, body)
+}

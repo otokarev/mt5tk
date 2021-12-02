@@ -17,6 +17,7 @@ func Build(factory *model.Factory) *cobra.Command {
 	groupCmd.AddCommand(buildGet())
 	groupCmd.AddCommand(buildList())
 	groupCmd.AddCommand(buildFillWithSymbols())
+	groupCmd.AddCommand(buildDuplicate())
 
 	return groupCmd
 }

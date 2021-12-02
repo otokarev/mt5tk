@@ -1,6 +1,7 @@
 package connection
 
 import (
+	"bytes"
 	"crypto/md5"
 	"crypto/tls"
 	"encoding/hex"
@@ -72,6 +73,36 @@ func (c *Connection) Get(url string) ([]byte, error) {
 		panic("Cannot connect to the server")
 	}
 	return c.processGetQuery(url)
+}
+
+func (c *Connection) Post(url string, body []byte) ([]byte, error) {
+	resp, err := c.getClient().Post(c.url+url, "application/json", bytes.NewReader(body))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.StatusCode != 200 {
+		return nil, errors.New(fmt.Sprintf("Bad response: url: '%s'; status '%s'; response: '%s'", url, resp.Status, string(body)))
+	}
+
+	var response retcodeResponse
+
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	if response.Retcode != "0 Done" {
+		return nil, errors.New(fmt.Sprintf("Request failed. Retcode: `%s`", response.Retcode))
+	}
+
+	return body, nil
 }
 
 func (c *Connection) processGetQuery(url string) ([]byte, error) {
