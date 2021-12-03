@@ -15,6 +15,7 @@ func Build(factory *model.Factory) *cobra.Command {
 	}
 
 	symbolCmd.AddCommand(buildGet())
+	symbolCmd.AddCommand(buildListNames())
 	symbolCmd.AddCommand(buildList())
 
 	return symbolCmd
