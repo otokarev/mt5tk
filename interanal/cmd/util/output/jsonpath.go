@@ -25,7 +25,7 @@ func (o *output) PrintJsonpath(results interface{}, pattern string) error {
 		return err
 	}
 
-	fmt.Println(sortedOut)
+	fmt.Println(strings.Join(sortedOut, "\n"))
 
 	return nil
 }
