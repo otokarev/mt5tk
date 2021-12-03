@@ -18,6 +18,11 @@ type getRequest struct {
 	Symbol string `url:"symbol"`
 }
 
+type getForGroupRequest struct {
+	Symbol string `url:"symbol"`
+	Group  string `url:"group"`
+}
+
 type getResponse struct {
 	Answer SymbolObject `json:"answer"`
 }
@@ -43,6 +48,25 @@ func (s *Symbol) Get(symbol string) (SymbolObject, error) {
 	}
 
 	payload, err := s.Client.Get("/api/symbol/get?" + q.Encode())
+	if err != nil {
+		return SymbolObject{}, err
+	}
+	resp := getResponse{}
+	if nil != json.Unmarshal(payload, &resp) {
+		return SymbolObject{}, err
+	}
+
+	return resp.Answer, nil
+}
+
+func (s *Symbol) GetForGroup(symbol string, group string) (SymbolObject, error) {
+	req := getForGroupRequest{Symbol: symbol, Group: group}
+	q, err := query.Values(req)
+	if err != nil {
+		return SymbolObject{}, err
+	}
+
+	payload, err := s.Client.Get("/api/symbol/get_group?" + q.Encode())
 	if err != nil {
 		return SymbolObject{}, err
 	}

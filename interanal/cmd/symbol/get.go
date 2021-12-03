@@ -2,19 +2,29 @@ package symbol
 
 import (
 	"github.com/otokarev/mt5tk/interanal/cmd/util/output"
+	symbol2 "github.com/otokarev/mt5tk/pkg/model/symbol"
 	"github.com/spf13/cobra"
 	"log"
 )
 
 func buildGet() *cobra.Command {
 	var symbol string
+	var group string
 	var outputFormat string
 
 	var getCmd = &cobra.Command{
 		Use:   "get",
-		Short: "Get symbol's details",
+		Short: "Get symbol's details. With --group parameter it returns symbol details for a specified group.",
 		Run: func(cmd *cobra.Command, args []string) {
-			results, err := modelFactory.Symbol().Get(symbol)
+			var err error
+			var results symbol2.SymbolObject
+
+			if group == "" {
+				results, err = modelFactory.Symbol().Get(symbol)
+			} else {
+				results, err = modelFactory.Symbol().GetForGroup(symbol, group)
+			}
+
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -24,8 +34,9 @@ func buildGet() *cobra.Command {
 		},
 	}
 	getCmd.Flags().StringVarP(&symbol, "symbol", "s", "", "Symbol name")
-	getCmd.Flags().StringVarP(&outputFormat, "output", "o", "json", "json|jsonpath=<pattern>")
 	getCmd.MarkFlagRequired("symbol")
+	getCmd.Flags().StringVarP(&group, "group", "g", "", "Group name")
+	getCmd.Flags().StringVarP(&outputFormat, "output", "o", "json", "json|jsonpath=<pattern>")
 
 	return getCmd
 }
