@@ -1,6 +1,7 @@
 package group
 
 import (
+	"github.com/otokarev/mt5tk/interanal/cmd/group/symbol"
 	"github.com/otokarev/mt5tk/pkg/model"
 	"github.com/spf13/cobra"
 )
@@ -19,6 +20,8 @@ func Build(factory *model.Factory) *cobra.Command {
 	groupCmd.AddCommand(buildFillWithSymbols())
 	groupCmd.AddCommand(buildDuplicate())
 	groupCmd.AddCommand(buildCreate())
+
+	groupCmd.AddCommand(symbol.Build(modelFactory))
 
 	return groupCmd
 }
