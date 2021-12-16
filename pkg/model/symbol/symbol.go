@@ -2,14 +2,14 @@ package symbol
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/google/go-querystring/query"
 	"github.com/otokarev/mt5tk/pkg/client"
 	"strconv"
 )
 
 type Symbol struct {
-	Client *client.Client
+	Client     *client.Client
+	ClientPool []*client.Client
 }
 
 type listResponse struct {
@@ -48,34 +48,21 @@ func (s *Symbol) ListNames() ([]string, error) {
 	return resp.Answer, nil
 }
 
-func (s *Symbol) List() ([]SymbolObject, error) {
+func (s *Symbol) GetTotal() (int, error) {
 	payload, err := s.Client.Get("/api/symbol/total")
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	resp := totalResponse{}
 	if nil != json.Unmarshal(payload, &resp) {
-		return nil, err
+		return 0, err
 	}
-	total, _ := strconv.Atoi(resp.Answer.Total)
-	if nil != json.Unmarshal(payload, &resp) {
-		return nil, err
-	}
-
-	var results []SymbolObject
-	for i := 0; i < total; i++ {
-		payload, err := s.Client.Get(fmt.Sprintf("/api/symbol/next?index=%d", i))
-		if err != nil {
-			return nil, err
-		}
-		resp := getResponse{}
-		if nil != json.Unmarshal(payload, &resp) {
-			return nil, err
-		}
-		results = append(results, resp.Answer)
+	total, err := strconv.Atoi(resp.Answer.Total)
+	if nil != err {
+		return 0, err
 	}
 
-	return results, nil
+	return total, nil
 }
 
 func (s *Symbol) Get(symbol string) (SymbolObject, error) {

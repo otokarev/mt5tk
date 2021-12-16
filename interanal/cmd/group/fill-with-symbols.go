@@ -31,17 +31,13 @@ func buildFillWithSymbols() *cobra.Command {
 				log.Fatal("cannot parse template file contents, error: ", err.Error())
 			}
 
-			symbols, err := modelFactory.Symbol().ListNames()
+			symbolObjects, err := modelFactory.Symbol().ListByNames()
 			if err != nil {
 				log.Fatal(err)
 			}
 
 			var groupSymbolObjects []group2.SymbolObject
-			for _, name := range symbols {
-				symbolObject, err := modelFactory.Symbol().Get(name)
-				if err != nil {
-					log.Fatal(err)
-				}
+			for _, symbolObject := range symbolObjects {
 				obj := tmpl
 				obj.Path = symbolObject.Path
 				groupSymbolObjects = append(groupSymbolObjects, obj)

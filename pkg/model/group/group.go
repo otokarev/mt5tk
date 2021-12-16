@@ -11,7 +11,8 @@ import (
 )
 
 type Group struct {
-	Client *client.Client
+	Client     *client.Client
+	ClientPool []*client.Client
 }
 
 type getRequest struct {

@@ -3,7 +3,6 @@ package cmd
 import (
 	"github.com/otokarev/mt5tk/interanal/cmd/group"
 	"github.com/otokarev/mt5tk/interanal/cmd/symbol"
-	"github.com/otokarev/mt5tk/pkg/client"
 	"github.com/otokarev/mt5tk/pkg/connection"
 	"github.com/otokarev/mt5tk/pkg/model"
 	"github.com/spf13/cobra"
@@ -17,6 +16,7 @@ var server string
 var login string
 var password string
 var skipVerifySsl bool
+var maxConnects int
 
 var modelFactory model.Factory
 
@@ -37,24 +37,34 @@ func init() {
 	RootCmd.PersistentFlags().StringVar(&server, "server", "", "MT5 server DSN")
 	RootCmd.PersistentFlags().StringVar(&login, "login", "", "MT5 server login")
 	RootCmd.PersistentFlags().StringVar(&password, "password", "", "MT5 server password")
+	RootCmd.PersistentFlags().IntVar(&maxConnects, "max_connects", 10, "Max. simultaneous connections to MT5 server")
 	RootCmd.PersistentFlags().BoolVar(&skipVerifySsl, "skip_verify_ssl", false, "Skip SSL verification while communicate with MT5 server")
 
 	viper.BindPFlag("server", RootCmd.PersistentFlags().Lookup("server"))
 	viper.BindPFlag("login", RootCmd.PersistentFlags().Lookup("login"))
 	viper.BindPFlag("password", RootCmd.PersistentFlags().Lookup("password"))
 	viper.BindPFlag("skip_verify_ssl", RootCmd.PersistentFlags().Lookup("skip_verify_ssl"))
+	viper.BindPFlag("max_connects", RootCmd.PersistentFlags().Lookup("max_connects"))
 
 	RootCmd.AddCommand(symbol.Build(&modelFactory))
 	RootCmd.AddCommand(group.Build(&modelFactory))
 }
 
 func initModelFactory() {
-	conn := connection.NewConnection(
+	maxConnects := viper.GetInt("max_connects")
+	connects := make([]*connection.Connection, maxConnects)
+	for i, _ := range connects {
+		connects[i] = initConnection()
+	}
+	modelFactory = *model.NewFactory(connects)
+}
+
+func initConnection() *connection.Connection {
+	return connection.NewConnection(
 		viper.GetString("server"),
 		viper.GetString("login"),
 		viper.GetString("password"),
 		viper.GetBool("skip_verify_ssl"))
-	modelFactory = model.Factory{Client: &client.Client{Connection: conn}}
 }
 
 func initConfig() {
