@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"k8s.io/client-go/util/jsonpath"
-	"sort"
-	"strings"
 )
 
 func (o *output) PrintJsonpath(results interface{}, pattern string) error {
@@ -19,13 +17,8 @@ func (o *output) PrintJsonpath(results interface{}, pattern string) error {
 	if err != nil {
 		return err
 	}
-	sortedOut := strings.Fields(buf.String())
-	sort.Strings(sortedOut)
-	if err != nil {
-		return err
-	}
 
-	fmt.Println(strings.Join(sortedOut, "\n"))
+	fmt.Println(buf.String())
 
 	return nil
 }

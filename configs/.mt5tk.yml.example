@@ -1,0 +1,4 @@
+server: "https://127.0.0.1:443"
+login: "1000"
+password: "SecretPa33"
+skip_verify_ssl: true
