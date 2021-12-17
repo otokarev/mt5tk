@@ -13,8 +13,11 @@ func buildList() *cobra.Command {
 		Use:   "list",
 		Short: "List groups",
 		Run: func(cmd *cobra.Command, args []string) {
-			results := modelFactory.Group().List()
-			err := output.Print(outputFormat, results)
+			results, err := modelFactory.Group().List()
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = output.Print(outputFormat, results)
 			if err != nil {
 				log.Fatal(err)
 			}

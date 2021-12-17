@@ -2,7 +2,6 @@ package group
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/google/go-querystring/query"
 	"github.com/otokarev/mt5tk/pkg/client"
 	"github.com/otokarev/mt5tk/pkg/connection"
@@ -27,6 +26,23 @@ type totalResponse struct {
 	Answer struct {
 		Total string `json:"total"`
 	} `json:"answer"`
+}
+
+func (g *Group) GetTotal() (int, error) {
+	payload, err := g.Client.Get("/api/group/total")
+	if err != nil {
+		return 0, err
+	}
+	resp := totalResponse{}
+	if nil != json.Unmarshal(payload, &resp) {
+		return 0, err
+	}
+	total, err := strconv.Atoi(resp.Answer.Total)
+	if nil != err {
+		return 0, err
+	}
+
+	return total, nil
 }
 
 func (g *Group) Add(data GroupObject) (GroupObject, error) {
@@ -79,34 +95,4 @@ func (g *Group) Get(group string) (GroupObject, error) {
 	}
 
 	return resp.Answer, nil
-}
-
-func (g *Group) List() []GroupObject {
-	payload, err := g.Client.Get("/api/group/total")
-	if err != nil {
-		log.Fatal(err)
-	}
-	resp := totalResponse{}
-	if nil != json.Unmarshal(payload, &resp) {
-		log.Fatalf("Cannot interpret `%s`", string(payload))
-	}
-	total, _ := strconv.Atoi(resp.Answer.Total)
-	if nil != json.Unmarshal(payload, &resp) {
-		log.Fatalf("Cannot interpret `%s`", string(payload))
-	}
-
-	results := []GroupObject{}
-	for i := 0; i < total; i++ {
-		payload, err := g.Client.Get(fmt.Sprintf("/api/group/next?index=%d", i))
-		if err != nil {
-			log.Fatal(err)
-		}
-		resp := getResponse{}
-		if nil != json.Unmarshal(payload, &resp) {
-			log.Fatal(err)
-		}
-		results = append(results, resp.Answer)
-	}
-
-	return results
 }
