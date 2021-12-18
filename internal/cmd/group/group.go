@@ -1,7 +1,7 @@
 package group
 
 import (
-	"github.com/otokarev/mt5tk/interanal/cmd/group/symbol"
+	"github.com/otokarev/mt5tk/internal/cmd/group/symbol"
 	"github.com/otokarev/mt5tk/pkg/model"
 	"github.com/spf13/cobra"
 )

@@ -1,8 +1,8 @@
 package symbol
 
 import (
-	"github.com/otokarev/mt5tk/interanal/cmd/util/output"
-	symbol2 "github.com/otokarev/mt5tk/pkg/model/symbol"
+	"github.com/otokarev/mt5tk/internal/cmd/util/output"
+	symbol2 "github.com/otokarev/mt5tk/pkg/model/entities"
 	"github.com/spf13/cobra"
 	"log"
 )
@@ -17,7 +17,7 @@ func buildGet() *cobra.Command {
 		Short: "Get symbol's details. With --group parameter it returns symbol details for a specified group.",
 		Run: func(cmd *cobra.Command, args []string) {
 			var err error
-			var results symbol2.SymbolObject
+			var results symbol2.Symbol
 
 			if group == "" {
 				results, err = modelFactory.Symbol().Get(symbol)

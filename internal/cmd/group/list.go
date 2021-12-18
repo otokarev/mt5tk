@@ -1,7 +1,7 @@
 package group
 
 import (
-	"github.com/otokarev/mt5tk/interanal/cmd/util/output"
+	"github.com/otokarev/mt5tk/internal/cmd/util/output"
 	"github.com/spf13/cobra"
 	"log"
 )

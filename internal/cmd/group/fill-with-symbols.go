@@ -2,7 +2,7 @@ package group
 
 import (
 	"encoding/json"
-	group2 "github.com/otokarev/mt5tk/pkg/model/group"
+	group2 "github.com/otokarev/mt5tk/pkg/model/entities"
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"log"
@@ -26,7 +26,7 @@ func buildFillWithSymbols() *cobra.Command {
 			if err != nil {
 				log.Fatal("cannot read template file, error: ", err.Error())
 			}
-			var tmpl group2.SymbolObject
+			var tmpl group2.GroupSymbol
 			if err := json.Unmarshal(data, &tmpl); err != nil {
 				log.Fatal("cannot parse template file contents, error: ", err.Error())
 			}
@@ -36,7 +36,7 @@ func buildFillWithSymbols() *cobra.Command {
 				log.Fatal(err)
 			}
 
-			var groupSymbolObjects []group2.SymbolObject
+			var groupSymbolObjects []group2.GroupSymbol
 			for _, symbolObject := range symbolObjects {
 				obj := tmpl
 				obj.Path = symbolObject.Path

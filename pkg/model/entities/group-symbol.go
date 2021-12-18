@@ -1,6 +1,6 @@
-package group
+package entities
 
-type SymbolObject struct {
+type GroupSymbol struct {
 	Path                           string `json:"Path"`
 	TradeMode                      string `json:"TradeMode"`
 	ExecMode                       string `json:"ExecMode"`

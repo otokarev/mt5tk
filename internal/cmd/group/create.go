@@ -2,7 +2,7 @@ package group
 
 import (
 	"encoding/json"
-	group2 "github.com/otokarev/mt5tk/pkg/model/group"
+	group2 "github.com/otokarev/mt5tk/pkg/model/entities"
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"log"
@@ -28,7 +28,7 @@ func buildCreate() *cobra.Command {
 			if err != nil {
 				log.Fatal("cannot read template file, error: ", err.Error())
 			}
-			var newGroup group2.GroupObject
+			var newGroup group2.Group
 			if err := json.Unmarshal(data, &newGroup); err != nil {
 				log.Fatal("cannot parse template file contents, error: ", err.Error())
 			}

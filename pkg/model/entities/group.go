@@ -1,6 +1,6 @@
-package group
+package entities
 
-type GroupObject struct {
+type Group struct {
 	Group                string        `json:"Group"`
 	Server               string        `json:"Server"`
 	PermissionsFlags     string        `json:"PermissionsFlags"`
@@ -63,5 +63,5 @@ type GroupObject struct {
 			Currency  string `json:"Currency"`
 		} `json:"Tiers"`
 	} `json:"Commissions"`
-	Symbols []SymbolObject ` json:"Symbols"`
+	Symbols []GroupSymbol ` json:"Symbols"`
 }

@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/otokarev/mt5tk/interanal/cmd/group"
-	"github.com/otokarev/mt5tk/interanal/cmd/symbol"
+	"github.com/otokarev/mt5tk/internal/cmd/group"
+	"github.com/otokarev/mt5tk/internal/cmd/symbol"
 	"github.com/otokarev/mt5tk/pkg/connection"
 	"github.com/otokarev/mt5tk/pkg/model"
 	"github.com/spf13/cobra"

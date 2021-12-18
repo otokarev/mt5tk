@@ -7,10 +7,11 @@ import (
 	client2 "github.com/otokarev/mt5tk/pkg/client"
 	"github.com/otokarev/mt5tk/pkg/connection"
 	"github.com/otokarev/mt5tk/pkg/cracker"
+	"github.com/otokarev/mt5tk/pkg/model/entities"
 )
 
 // List loads all available symbols by their indexes from 0 to total (see GetTotal)
-func (s *Symbol) List() ([]SymbolObject, error) {
+func (s *Symbol) List() ([]entities.Symbol, error) {
 	total, err := s.GetTotal()
 	if nil != err {
 		return nil, err
@@ -22,7 +23,7 @@ func (s *Symbol) List() ([]SymbolObject, error) {
 }
 
 // ListByNames loads all available symbols by their names retrieved by ListNames
-func (s *Symbol) ListByNames() ([]SymbolObject, error) {
+func (s *Symbol) ListByNames() ([]entities.Symbol, error) {
 	names, err := s.ListNames()
 	if nil != err {
 		return nil, err
@@ -33,10 +34,10 @@ func (s *Symbol) ListByNames() ([]SymbolObject, error) {
 	return s.processListCommands(cmds)
 }
 
-func (s *Symbol) processListCommands(cmds []cracker.Command) ([]SymbolObject, error) {
+func (s *Symbol) processListCommands(cmds []cracker.Command) ([]entities.Symbol, error) {
 	rawResults := cracker.ProcessBatch(cmds, convertClientPoolToResources(s.ClientPool))
 
-	var results []SymbolObject
+	var results []entities.Symbol
 	for i := 0; i < len(cmds); i++ {
 		err := rawResults[i].Error()
 		if err != nil {
@@ -46,7 +47,7 @@ func (s *Symbol) processListCommands(cmds []cracker.Command) ([]SymbolObject, er
 			continue
 		}
 
-		results = append(results, rawResults[i].Result().(SymbolObject))
+		results = append(results, rawResults[i].Result().(entities.Symbol))
 	}
 
 	return results, nil
@@ -89,16 +90,16 @@ func prepareListByNamesCommands(names []string) []cracker.Command {
 		req := getRequest{Symbol: name}
 		q, err := query.Values(req)
 		if err != nil {
-			return SymbolObject{}, err
+			return entities.Symbol{}, err
 		}
 
 		payload, err := client.Get("/api/symbol/get?" + q.Encode())
 		if err != nil {
-			return SymbolObject{}, err
+			return entities.Symbol{}, err
 		}
 		resp := getResponse{}
 		if nil != json.Unmarshal(payload, &resp) {
-			return SymbolObject{}, err
+			return entities.Symbol{}, err
 		}
 		return cracker.Result(resp.Answer), nil
 	}

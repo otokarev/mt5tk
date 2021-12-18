@@ -2,7 +2,7 @@ package symbol
 
 import (
 	"encoding/json"
-	group2 "github.com/otokarev/mt5tk/pkg/model/group"
+	"github.com/otokarev/mt5tk/pkg/model/entities"
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"log"
@@ -106,7 +106,7 @@ func updateSymbolWithTemplate(group *string, symbol *string, path *string, templ
 	}
 }
 
-func validateParamsAndPrepareGroupForUpdateWithTemplate(group *string, symbol *string, path *string, replace bool) (group2.GroupObject, string) {
+func validateParamsAndPrepareGroupForUpdateWithTemplate(group *string, symbol *string, path *string, replace bool) (entities.Group, string) {
 	if *path == "" && *symbol == "" {
 		log.Fatal("Nor symbol neither path are specified")
 	}
@@ -155,12 +155,12 @@ func validateParamsAndPrepareGroupForUpdateWithTemplate(group *string, symbol *s
 	return groupObject, *path
 }
 
-func loadSymbolTemplateFromFile(templatePath *string) group2.SymbolObject {
+func loadSymbolTemplateFromFile(templatePath *string) entities.GroupSymbol {
 	data, err := ioutil.ReadFile(*templatePath)
 	if err != nil {
 		log.Fatal("cannot read template file, error: ", err.Error())
 	}
-	var s group2.SymbolObject
+	var s entities.GroupSymbol
 	if err := json.Unmarshal(data, &s); err != nil {
 		log.Fatal("cannot parse template file contents, error: ", err.Error())
 	}

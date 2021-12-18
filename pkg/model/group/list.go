@@ -6,10 +6,11 @@ import (
 	client2 "github.com/otokarev/mt5tk/pkg/client"
 	"github.com/otokarev/mt5tk/pkg/connection"
 	"github.com/otokarev/mt5tk/pkg/cracker"
+	"github.com/otokarev/mt5tk/pkg/model/entities"
 )
 
 // List loads all available groups by their indexes from 0 to total (see GetTotal)
-func (g *Group) List() ([]GroupObject, error) {
+func (g *Group) List() ([]entities.Group, error) {
 	total, err := g.GetTotal()
 	if nil != err {
 		return nil, err
@@ -20,10 +21,10 @@ func (g *Group) List() ([]GroupObject, error) {
 	return g.processListCommands(cmds)
 }
 
-func (g *Group) processListCommands(cmds []cracker.Command) ([]GroupObject, error) {
+func (g *Group) processListCommands(cmds []cracker.Command) ([]entities.Group, error) {
 	rawResults := cracker.ProcessBatch(cmds, convertClientPoolToResources(g.ClientPool))
 
-	var results []GroupObject
+	var results []entities.Group
 	for i := 0; i < len(cmds); i++ {
 		err := rawResults[i].Error()
 		if err != nil {
@@ -33,7 +34,7 @@ func (g *Group) processListCommands(cmds []cracker.Command) ([]GroupObject, erro
 			continue
 		}
 
-		results = append(results, rawResults[i].Result().(GroupObject))
+		results = append(results, rawResults[i].Result().(entities.Group))
 	}
 
 	return results, nil

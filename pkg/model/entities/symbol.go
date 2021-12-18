@@ -1,6 +1,6 @@
-package symbol
+package entities
 
-type SymbolObject struct {
+type Symbol struct {
 	Symbol                         string `json:"Symbol"`
 	Path                           string `json:"Path"`
 	ISIN                           string `json:"ISIN"`
