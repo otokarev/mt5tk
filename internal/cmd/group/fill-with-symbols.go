@@ -31,7 +31,7 @@ func buildFillWithSymbols() *cobra.Command {
 				log.Fatal("cannot parse template file contents, error: ", err.Error())
 			}
 
-			symbolObjects, err := modelFactory.Symbol().ListByNames()
+			symbolObjects, err := modelFactory.Symbol().List()
 			if err != nil {
 				log.Fatal(err)
 			}
