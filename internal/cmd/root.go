@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"github.com/otokarev/mt5tk/internal/cmd/account"
 	"github.com/otokarev/mt5tk/internal/cmd/group"
 	"github.com/otokarev/mt5tk/internal/cmd/symbol"
+	"github.com/otokarev/mt5tk/internal/cmd/user"
 	"github.com/otokarev/mt5tk/pkg/connection"
 	"github.com/otokarev/mt5tk/pkg/model"
 	"github.com/spf13/cobra"
@@ -48,6 +50,8 @@ func init() {
 
 	RootCmd.AddCommand(symbol.Build(&modelFactory))
 	RootCmd.AddCommand(group.Build(&modelFactory))
+	RootCmd.AddCommand(user.Build(&modelFactory))
+	RootCmd.AddCommand(account.Build(&modelFactory))
 }
 
 func initModelFactory() {

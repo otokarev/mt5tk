@@ -18,7 +18,7 @@ type Group struct {
 }
 
 type getRequest struct {
-	Group string `url:"group"`
+	Id string `url:"group"`
 }
 
 type getResponse struct {
@@ -82,7 +82,7 @@ func (g *Group) Exists(name string) (bool, error) {
 }
 
 func (g *Group) Get(name string) (entities.Group, error) {
-	req := getRequest{Group: name}
+	req := getRequest{Id: name}
 	q, err := query.Values(req)
 	if err != nil {
 		return entities.Group{}, err
