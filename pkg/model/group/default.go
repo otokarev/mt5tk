@@ -93,7 +93,7 @@ func (g *Group) Get(name string) (entities.Group, error) {
 		return entities.Group{}, err
 	}
 	resp := getResponse{}
-	if nil != json.Unmarshal(payload, &resp) {
+	if err := json.Unmarshal(payload, &resp); err != nil {
 		return entities.Group{}, err
 	}
 

@@ -27,7 +27,7 @@ func buildGet() *cobra.Command {
 		},
 	}
 	getCmd.Flags().StringVarP(&outputFormat, "output", "o", "json", "json|jsonpath=<pattern>")
-	getCmd.Flags().StringVarP(&id, "account", "u", "", "account identifier")
+	getCmd.Flags().StringVarP(&id, "account", "k", "", "account identifier")
 	getCmd.MarkFlagRequired("account")
 
 	return getCmd

@@ -4,7 +4,9 @@ import (
 	"github.com/otokarev/mt5tk/pkg/client"
 	"github.com/otokarev/mt5tk/pkg/connection"
 	"github.com/otokarev/mt5tk/pkg/model/account"
+	"github.com/otokarev/mt5tk/pkg/model/deal"
 	"github.com/otokarev/mt5tk/pkg/model/group"
+	"github.com/otokarev/mt5tk/pkg/model/order"
 	"github.com/otokarev/mt5tk/pkg/model/symbol"
 	"github.com/otokarev/mt5tk/pkg/model/user"
 )
@@ -47,4 +49,12 @@ func (f *Factory) User() *user.User {
 
 func (f *Factory) Account() *account.Account {
 	return &account.Account{Client: f.client(), ClientPool: f.clientPool()}
+}
+
+func (f *Factory) Order() *order.Order {
+	return &order.Order{Client: f.client(), ClientPool: f.clientPool()}
+}
+
+func (f *Factory) Deal() *deal.Deal {
+	return &deal.Deal{Client: f.client(), ClientPool: f.clientPool()}
 }

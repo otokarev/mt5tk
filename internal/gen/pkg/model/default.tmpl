@@ -93,7 +93,7 @@ func (g *{{.Type}}) Get(name string) (entities.{{.Type}}, error) {
 		return entities.{{.Type}}{}, err
 	}
 	resp := getResponse{}
-	if nil != json.Unmarshal(payload, &resp) {
+	if err := json.Unmarshal(payload, &resp); err != nil {
 		return entities.{{.Type}}{}, err
 	}
 

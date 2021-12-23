@@ -93,7 +93,7 @@ func (g *Symbol) Get(name string) (entities.Symbol, error) {
 		return entities.Symbol{}, err
 	}
 	resp := getResponse{}
-	if nil != json.Unmarshal(payload, &resp) {
+	if err := json.Unmarshal(payload, &resp); err != nil {
 		return entities.Symbol{}, err
 	}
 

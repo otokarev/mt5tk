@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 	"text/template"
 )
 
@@ -14,20 +15,29 @@ type data struct {
 	ShortName string
 	IdName    string
 	GetPath   string
+	CmdNames  []string
 }
 
 func main() {
 	var d data
 	var outName string
+	var cmdNames string
 	var tmplFileName string
 	flag.StringVar(&d.Type, "type", "", "class name")
 	flag.StringVar(&d.Name, "name", "", "package name")
 	flag.StringVar(&d.IdName, "id-name", "", "get request id name")
 	flag.StringVar(&d.ShortName, "short-name", "", "short name")
 	flag.StringVar(&d.GetPath, "get-path", "", "get path, like: /api/group/get")
+	flag.StringVar(&cmdNames, "cmd-names", "", "command names")
 	flag.StringVar(&outName, "out", "", "output file name")
 	flag.StringVar(&tmplFileName, "template", "", "template file")
 	flag.Parse()
+
+	for _, v := range strings.Split(cmdNames, ",") {
+		if v != "" {
+			d.CmdNames = append(d.CmdNames, strings.Title(v))
+		}
+	}
 
 	if d.IdName == "" {
 		d.IdName = d.Name

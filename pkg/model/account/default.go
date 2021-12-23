@@ -93,7 +93,7 @@ func (g *Account) Get(name string) (entities.Account, error) {
 		return entities.Account{}, err
 	}
 	resp := getResponse{}
-	if nil != json.Unmarshal(payload, &resp) {
+	if err := json.Unmarshal(payload, &resp); err != nil {
 		return entities.Account{}, err
 	}
 
