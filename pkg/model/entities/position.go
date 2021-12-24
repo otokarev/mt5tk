@@ -11,8 +11,8 @@ type Position struct {
 	DigitsCurrency   string `json:"DigitsCurrency"`
 	Reason           string `json:"Reason"`
 	ContractSize     string `json:"ContractSize"`
-	TimeCreate       int    `json:"TimeCreate"`
-	TimeUpdate       int    `json:"TimeUpdate"`
+	TimeCreate       string `json:"TimeCreate"`
+	TimeUpdate       string `json:"TimeUpdate"`
 	TimeCreateMsc    string `json:"TimeCreateMsc"`
 	TimeUpdateMsc    string `json:"TimeUpdateMsc"`
 	ModifyFlags      string `json:"ModifyFlags"`

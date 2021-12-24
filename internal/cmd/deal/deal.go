@@ -15,7 +15,6 @@ func Build(factory *model.Factory) *cobra.Command {
 		Use:   "deal",
 		Short: "Deal operations",
 	}
-
 	cmd.AddCommand(buildGet())
 
 	return cmd

@@ -15,7 +15,6 @@ func Build(factory *model.Factory) *cobra.Command {
 		Use:   "order",
 		Short: "Order operations",
 	}
-
 	cmd.AddCommand(buildGet())
 
 	return cmd

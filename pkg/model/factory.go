@@ -7,6 +7,7 @@ import (
 	"github.com/otokarev/mt5tk/pkg/model/deal"
 	"github.com/otokarev/mt5tk/pkg/model/group"
 	"github.com/otokarev/mt5tk/pkg/model/order"
+	"github.com/otokarev/mt5tk/pkg/model/position"
 	"github.com/otokarev/mt5tk/pkg/model/symbol"
 	"github.com/otokarev/mt5tk/pkg/model/user"
 )
@@ -57,4 +58,8 @@ func (f *Factory) Order() *order.Order {
 
 func (f *Factory) Deal() *deal.Deal {
 	return &deal.Deal{Client: f.client(), ClientPool: f.clientPool()}
+}
+
+func (f *Factory) Position() *position.Position {
+	return &position.Position{Client: f.client(), ClientPool: f.clientPool()}
 }
