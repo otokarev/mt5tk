@@ -16,6 +16,7 @@ func Build(factory *model.Factory) *cobra.Command {
 		Short: "Position operations",
 	}
 	cmd.AddCommand(buildGet())
+	cmd.AddCommand(buildGetBatch())
 
 	return cmd
 }
