@@ -6,6 +6,7 @@ import (
 	"github.com/otokarev/mt5tk/internal/cmd/group"
 	"github.com/otokarev/mt5tk/internal/cmd/order"
 	"github.com/otokarev/mt5tk/internal/cmd/position"
+	"github.com/otokarev/mt5tk/internal/cmd/profile"
 	"github.com/otokarev/mt5tk/internal/cmd/symbol"
 	"github.com/otokarev/mt5tk/internal/cmd/user"
 	"github.com/otokarev/mt5tk/pkg/connection"
@@ -58,6 +59,7 @@ func init() {
 	RootCmd.AddCommand(deal.Build(&modelFactory))
 	RootCmd.AddCommand(order.Build(&modelFactory))
 	RootCmd.AddCommand(position.Build(&modelFactory))
+	RootCmd.AddCommand(profile.Build(&modelFactory))
 }
 
 func initModelFactory() {
