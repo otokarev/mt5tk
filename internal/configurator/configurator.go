@@ -11,15 +11,17 @@ import (
 )
 
 type Configuration struct {
-	cfg entities.Configurations
+	cfg   entities.Configurations
+	viper *viper.Viper
 }
 
 func LoadConfig(fileName string, fileType string, path string) *Configuration {
-	viper.AddConfigPath(path)
-	viper.SetConfigType(fileType)
-	viper.SetConfigName(fileName)
-
 	c := new(Configuration)
+	c.viper = viper.New()
+	c.viper.AddConfigPath(path)
+	c.viper.SetConfigType(fileType)
+	c.viper.SetConfigName(fileName)
+
 	c.readConfig()
 
 	return c
@@ -29,11 +31,11 @@ func LoadDefaultConfig() *Configuration {
 	home, err := os.UserHomeDir()
 	cobra.CheckErr(err)
 
-	viper.AddConfigPath(home)
-	viper.SetConfigType("yaml")
-	viper.SetConfigName(".mt5tk.yml")
-
 	c := new(Configuration)
+	c.viper = viper.New()
+	c.viper.AddConfigPath(home)
+	c.viper.SetConfigType("yaml")
+	c.viper.SetConfigName(".mt5tk.yml")
 	c.readConfig()
 
 	return c
@@ -46,6 +48,16 @@ func (c *Configuration) GetProfileNames() []string {
 	}
 
 	return ret
+}
+
+func (c *Configuration) IfProfileExist(name string) bool {
+	p := c.GetProfileConfig(name)
+
+	if p.Name == "" {
+		return false
+	} else {
+		return true
+	}
 }
 
 func (c *Configuration) GetDefaultProfile() string {
@@ -73,14 +85,43 @@ func (c *Configuration) SwitchToProfile(profile string) {
 	c.storeConfig()
 }
 
+func (c *Configuration) AddNewProfile(profile entities.Profile) {
+	c.cfg.Profiles = append(c.cfg.Profiles, profile)
+	c.storeConfig()
+}
+
+func (c *Configuration) GetProfileConfig(name string) entities.Profile {
+	for _, v := range c.cfg.Profiles {
+		if v.Name == name {
+			return v
+		}
+	}
+
+	return entities.Profile{}
+}
+
+func (c *Configuration) GetProfileConfigYaml(name string) string {
+	p := c.GetProfileConfig(name)
+	if p.Name == "" {
+		log.Fatalf("profile %s does not exist", name)
+	}
+
+	b, err := yaml.Marshal(p)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return string(b)
+}
+
 func (c *Configuration) readConfig() {
 
-	err := viper.ReadInConfig()
+	err := c.viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("cannot read config file, error: %v \n", err)
 	}
 
-	err = viper.Unmarshal(&c.cfg)
+	err = c.viper.Unmarshal(&c.cfg)
 	if err != nil {
 		log.Fatalf("cannot parse config file, error: %v \n", err)
 	}
@@ -91,11 +132,11 @@ func (c *Configuration) storeConfig() {
 	if err != nil {
 		log.Fatalf("cannot store config file, error: %v \n", err)
 	}
-	err = viper.ReadConfig(bytes.NewBuffer(data))
+	err = c.viper.ReadConfig(bytes.NewBuffer(data))
 	if err != nil {
 		log.Fatalf("cannot store config file, error: %v \n", err)
 	}
-	err = viper.WriteConfig()
+	err = c.viper.WriteConfig()
 	if err != nil {
 		log.Fatalf("cannot store config file, error: %v \n", err)
 	}

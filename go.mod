@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.2 // indirect
+	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/google/go-querystring v1.1.0
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.9.0
