@@ -34,12 +34,12 @@ func buildSwitch() *cobra.Command {
 			if err != nil {
 				log.Fatal(err)
 			}
+
 			if profile == "Create New Profile" {
-				createNewProfile()
-			} else {
-				cfg.SwitchToProfile(profile)
-				fmt.Println("selected", profile)
+				profile = createNewProfile()
 			}
+			cfg.SwitchToProfile(profile)
+			fmt.Println("selected", profile)
 		},
 	}
 

@@ -5,4 +5,5 @@ type Profile struct {
 	ServerAddress string `yaml:"serverAddress"`
 	Login         string `yaml:"login"`
 	Password      string `yaml:"password"`
+	SkipVerifySsl bool   `yaml:"skipVerifySsl"`
 }

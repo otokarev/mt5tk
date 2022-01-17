@@ -21,7 +21,7 @@ func buildNew() *cobra.Command {
 	return cmd
 }
 
-func createNewProfile() {
+func createNewProfile() string {
 	var profile model2.Profile
 
 	var qs = []*survey.Question{
@@ -61,6 +61,11 @@ func createNewProfile() {
 			Prompt:   &survey.Password{Message: "Enter password:"},
 			Validate: survey.Required,
 		},
+		{
+			Name:     "skipVerifySsl",
+			Prompt:   &survey.Confirm{Message: "Skip ssl verification:", Default: false},
+			Validate: survey.Required,
+		},
 	}
 	err := survey.Ask(qs, &profile)
 	if err != nil {
@@ -83,4 +88,6 @@ func createNewProfile() {
 	} else {
 		log.Println("ok, nothing has been changed")
 	}
+
+	return profile.Name
 }

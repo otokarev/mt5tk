@@ -18,6 +18,7 @@ func Build(factory *model.Factory) *cobra.Command {
 	cmd.AddCommand(buildSwitch())
 	cmd.AddCommand(buildShow())
 	cmd.AddCommand(buildNew())
+	cmd.AddCommand(buildDelete())
 
 	return cmd
 }

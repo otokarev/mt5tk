@@ -80,13 +80,22 @@ func (c *Configuration) GetDefaultProfile() string {
 	return c.cfg.Profile
 }
 
-func (c *Configuration) SwitchToProfile(profile string) {
-	c.cfg.Profile = profile
+func (c *Configuration) SwitchToProfile(name string) {
+	c.cfg.Profile = name
 	c.storeConfig()
 }
 
 func (c *Configuration) AddNewProfile(profile entities.Profile) {
 	c.cfg.Profiles = append(c.cfg.Profiles, profile)
+	c.storeConfig()
+}
+
+func (c *Configuration) DeleteProfile(name string) {
+	for i, p := range c.cfg.Profiles {
+		if name == p.Name {
+			c.cfg.Profiles = append(c.cfg.Profiles[:i], c.cfg.Profiles[i+1:]...)
+		}
+	}
 	c.storeConfig()
 }
 
